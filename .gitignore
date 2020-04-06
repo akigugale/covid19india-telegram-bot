@@ -1,0 +1,5 @@
+telegram_bot_venv/
+__pycache__
+.vscode
+*.log
+*.json
