@@ -7,7 +7,7 @@ _(a crowdsouced initiative)_
 
 The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) in India, based on a [crowdsourced database](https://covid19india.org).
 
-## Bot at - <a href="t.me/covid19india_bot">t.me/covid19india_bot</a>
+## Bot at - <a href="https://t.me/covid19india_bot">t.me/covid19india_bot</a>
 
 
 <u>**Commands:**</b>
