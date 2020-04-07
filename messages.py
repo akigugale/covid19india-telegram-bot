@@ -11,8 +11,7 @@ def get_data():
 msg_start = """<b>Welcome to The India Covid-19 Tracker Bot! 🦠</b>
 (<i>a crowdsouced initiative</i>)
 
-The first Indian bot in telegram that can track the coronavirus (COVID-19) outbreak in real-time.
-
+The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) based on a crowdsourced dataset for India.
 
 <b><u>Commands:</u></b>
 
@@ -29,11 +28,13 @@ List of statewise cases in India.
 Info about the bot and the source.
 
 
-Note: Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from <a href='https://covid19india.org'>covid19india.org</a>.
+<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from <a href='https://covid19india.org'>covid19india.org</a>.
 
-Government Updates: @MyGovCoronaNewsdesk
-by <a href='https://twitter.com/akigugale'>@akigugale</a>\n\n
+Government Updates on: @MyGovCoronaNewsdesk
 
+Built by <a href='https://twitter.com/akigugale'>@akigugale</a>
+
+Stay Home, Stay Safe! 🏡
 
 """
 
@@ -42,7 +43,7 @@ by <a href='https://twitter.com/akigugale'>@akigugale</a>\n\n
 msg_about = """<b>This is the India Covid-19 Tracker Bot! 🦠 🇮🇳</b>
 (<i>a crowdsouced initiative</i>)
 
-The first Indian bot in telegram that can track the coronavirus (COVID-19) outbreak in real-time.
+The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) based on a crowdsourced dataset for India.
 
 Built by - <a href="https://twitter.com/akigugale">@akigugale</a>
 
@@ -52,9 +53,10 @@ Official Indian Govt. Telegram Channel: @MyGovCoronaNewsdesk
 
 Contribute at - https://github.com/akigugale/covid19india-telegram-bot
 
+-----------------
+<i>Made for public information, no legal obligation.</i>
 
-------------x x x ------------
-Made for public information, no legal obligation.
+Stay Home, Stay Safe! 🏡
 """
 
 def pretty_date_time(date_time):
@@ -69,6 +71,11 @@ def get_lastupdated_msg():
     msg_lastupdated = """Last Updated on <b>{0}</b>""".format(pretty_date_time(last_updated_time))
     return msg_lastupdated
 
+
+def get_footer(data):
+    last_updated = pretty_date_time(data['statewise'][0]['lastupdatedtime'])
+    footer = """\n Updated on {updated_on} \n Data from covid19india.org \n by akigugale.me""".format(updated_on = last_updated)
+    return footer
 
 
 def get_count_msg():
@@ -86,7 +93,6 @@ Updated on {updated_on}
     return msg
 
 
-
 def get_today_msg():
     data = get_data()
     total = data['statewise'][0]
@@ -96,14 +102,26 @@ def get_today_msg():
 😷 Confirmed: +{deltaconfirmed}
 💚 Recovered: +{deltarecovered}
 💀 Deceased:  +{deltadeaths}
-
-Updated on {updated_on}
     """.format(deltaconfirmed=total["deltaconfirmed"], deltarecovered=total['recovered'], deltadeaths=total['deltadeaths'],updated_on=updated_on , date=updated_on[0:6], time=updated_on[-9:])
+    msg += get_footer(data)
     return msg
 
 
-
 def get_statewise_msg():
-    return "Still in development, contribute at https://github.com/akigugale/covid19india-telegram-bot"
+    data = get_data()
+    statewise_data = data['statewise']
+    statewise_msg = """<b>Statewise data for COVID-19.</b>
 
+    😷 - Confirmed cases
+    💚 - Recovered
+    💀 - Deaths
+    <code>"""
+    for state in statewise_data[1:]:
+        formatted_state_data = "\n {state_name}: 😷 {confirmed}   💚 {recovered}   💀 {deaths}".format(state_name=state['statecode'], confirmed=state['confirmed'], recovered=state['recovered'], deaths=state['deaths'])
+        statewise_msg += formatted_state_data
+    # TODO: add last updated for each state and delta values?
 
+    statewise_msg += """\n------------------------ \n <b>{state_name}: 😷{confirmed}  💚{recovered}  💀{deaths}</b> </code>\n\n""".format(state_name=statewise_data[0]['state'], confirmed=statewise_data[0]['confirmed'], recovered=statewise_data[0]['recovered'], deaths=statewise_data[0]['deaths'])
+    statewise_msg += get_footer(data)
+
+    return statewise_msg
