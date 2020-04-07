@@ -1,6 +1,7 @@
 import requests
 import json
 import logging
+import datetime
 
 
 url = "https://api.covid19india.org/data.json"
@@ -18,6 +19,7 @@ if __name__ == "__main__":
                 logging.error("Exception occured", exc_info=True)
         else:
             logging.info("API response status was " +  str(data.status_code))
-        print("Ran")
+        dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        print("{timestamp} - Ran".format(timestamp=dt))
     except Exception as e:
         logging.error("Exception occured", exc_info=True)
