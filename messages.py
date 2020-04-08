@@ -28,11 +28,11 @@ List of statewise cases in India.
 Info about the bot and the source.
 
 
-<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from <a href='https://covid19india.org'>covid19india.org</a>.
+<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org
 
 Government Updates on: @MyGovCoronaNewsdesk
 
-Built by <a href='https://twitter.com/akigugale'>@akigugale</a>
+Built by akigugale.me
 
 Stay Home, Stay Safe! 🏡
 
@@ -89,7 +89,7 @@ def get_count_msg():
 💀 Deceased: <b>{deaths}</b>  [+{deltadeaths}]
 
 Updated on {updated_on}
-    """.format(confirmed=total["confirmed"], deltaconfirmed=total["deltaconfirmed"], active=total['active'], recovered=total['recovered'], deltarecovered=total['recovered'], deaths=total['deaths'], deltadeaths=total['deltadeaths'], updated_on=pretty_date_time(total['lastupdatedtime']))
+    """.format(confirmed=total["confirmed"], deltaconfirmed=total["deltaconfirmed"], active=total['active'], recovered=total['recovered'], deltarecovered=total['deltarecovered'], deaths=total['deaths'], deltadeaths=total['deltadeaths'], updated_on=pretty_date_time(total['lastupdatedtime']))
     return msg
 
 
@@ -102,7 +102,7 @@ def get_today_msg():
 😷 Confirmed: +{deltaconfirmed}
 💚 Recovered: +{deltarecovered}
 💀 Deceased:  +{deltadeaths}
-    """.format(deltaconfirmed=total["deltaconfirmed"], deltarecovered=total['recovered'], deltadeaths=total['deltadeaths'],updated_on=updated_on , date=updated_on[0:6], time=updated_on[-9:])
+    """.format(deltaconfirmed=total["deltaconfirmed"], deltarecovered=total['deltarecovered'], deltadeaths=total['deltadeaths'],updated_on=updated_on , date=updated_on[0:6], time=updated_on[-9:])
     msg += get_footer(data)
     return msg
 
