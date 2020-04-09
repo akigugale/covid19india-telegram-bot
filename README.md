@@ -1,4 +1,4 @@
-<a href="https://telegram.me/covid19india_bot"> <div align="center">
+<a href="https://telegram.me/covid19_indiabot"> <div align="center">
 <img src="https://www.covid19india.org/icon.png" width="100" height="100" />
 
 <b>India Covid-19 Tracker Bot!</b> <br>
@@ -7,7 +7,7 @@ _(a crowdsouced initiative)_
 
 The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) in India, based on a [crowdsourced database](https://covid19india.org).
 
-## Bot at - <a href="https://t.me/covid19india_bot">t.me/covid19india_bot</a>
+## Bot at - <a href="https://t.me/covid19_indiabot">t.me/covid19_indiabot</a>
 
 
 <u>**Commands:**</b>
