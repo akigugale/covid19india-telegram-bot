@@ -46,10 +46,10 @@ def handle_message(update: telegram.Update, context: CallbackContext):
         if update.message.reply_to_message.text == messages.ask_state_msg():
             message = messages.get_state_msg(update.message.text)
 
-    if re.match('Hi', update.message.text, re.IGNORECASE):
+    if re.match('hi|hello|hey', update.message.text, re.IGNORECASE):
         message = messages.hello_msg(update.message.chat.first_name)
 
-    elif re.match('count', update.message.text, re.IGNORECASE):
+    elif re.match('.*count.*', update.message.text, re.IGNORECASE):
         message = messages.get_count_msg()
 
     chat_id = update.message.chat_id
