@@ -48,8 +48,8 @@ def get_users():
             data = json.load(f)
             return data
     except Exception as e:
-        if type(e).__name__ == 'JSONDecodeError':
-            open('users.json', 'w').write(json.dumps({}))
+        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
+            open('users.json', 'w+').write(json.dumps({}))
             return {}
         else:
             logging.error("Exception occured", exc_info=True)
@@ -106,6 +106,12 @@ def handle_message(update: telegram.Update, context: CallbackContext):
 
     elif re.match('.*state', update.message.text, re.IGNORECASE):
         state(update, context)
+
+    elif re.match('.*unsubscribe', update.message.text, re.IGNORECASE):
+        unsubscribe(update, context)
+    
+    elif re.match('.*subscribe', update.message.text, re.IGNORECASE):
+        subscribe(update, context)
 
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
