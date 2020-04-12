@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import telegram
 import requests
 import logging
@@ -6,38 +6,39 @@ import messages
 from env import getenv
 
 
-def start(bot, update):
+def start(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=messages.msg_start, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=messages.msg_start, parse_mode=telegram.ParseMode.HTML)
 
-def about(bot, update):
+def about(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=messages.msg_about, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=messages.msg_about, parse_mode=telegram.ParseMode.HTML)
 
-def count(bot, update):
+def count(update: telegram.Update, context: CallbackContext):
     message = messages.get_count_msg()
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
-def today(bot, update):
+def today(update: telegram.Update, context: CallbackContext):
     message = messages.get_today_msg()
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
-def lastupdated(bot, update):
+def lastupdated(update: telegram.Update, context: CallbackContext):
     message = messages.get_lastupdated_msg()
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
-def statewise(bot, update):
+def statewise(update: telegram.Update, context: CallbackContext):
     message = messages.get_statewise_msg()
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
-def handle_message(bot, update):
+def handle_message(update: telegram.Update, context: CallbackContext):
+    print(update.message)
     message = 'Hi'
     chat_id = update.message.chat_id
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
 def main():
     updater = Updater(getenv('API_KEY'), use_context=True)
