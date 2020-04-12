@@ -156,3 +156,7 @@ def get_state_msg(state_name):
 Updated on {updated_on}
     """.format(state_name=details['state'], confirmed=details["confirmed"], deltaconfirmed=details["deltaconfirmed"], active=details['active'], recovered=details['recovered'], deltarecovered=details['deltarecovered'], deaths=details['deaths'], deltadeaths=details['deltadeaths'], updated_on=pretty_date_time(details['lastupdatedtime']))
     return state_msg
+
+def subscription_success():
+    return """You have successfully subscribed!
+You will receive daily updates at 9:00pm IST."""
