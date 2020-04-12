@@ -3,6 +3,7 @@ import telegram
 import requests
 import logging
 import messages
+from env import getenv
 
 
 def start(bot, update):
@@ -35,7 +36,7 @@ def statewise(bot, update):
 
 
 def main():
-    updater = Updater('API KEY')
+    updater = Updater(getenv('API_KEY'))
     dp = updater.dispatcher
     logging.basicConfig(filename='bot.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     dp.add_handler(CommandHandler('start',start))
