@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
 import requests
 import logging
@@ -34,9 +34,13 @@ def statewise(bot, update):
     chat_id = update.message.chat_id
     bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
+def handle_message(bot, update):
+    message = 'Hi'
+    chat_id = update.message.chat_id
+    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
 def main():
-    updater = Updater(getenv('API_KEY'))
+    updater = Updater(getenv('API_KEY'), use_context=True)
     dp = updater.dispatcher
     logging.basicConfig(filename='bot.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     dp.add_handler(CommandHandler('start',start))
@@ -46,6 +50,7 @@ def main():
     dp.add_handler(CommandHandler('statewise',statewise))
     dp.add_handler(CommandHandler('about',about))
     dp.add_handler(CommandHandler('lastupdated',lastupdated))
+    dp.add_handler(MessageHandler(Filters.text, handle_message))
 
     updater.start_polling()
     updater.idle()
