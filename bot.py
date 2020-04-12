@@ -5,6 +5,7 @@ import logging
 import messages
 import re
 import json
+from datetime import time
 from env import getenv
 
 
@@ -60,16 +61,20 @@ def save_users(users):
     except Exception:
         logging.error("Exception occured", exc_info=True)
 
+def daily_message(context: CallbackContext):
+    users = get_users()
+    message = messages.get_count_msg()
+    for chat_id in users:
+        context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+
 def subscribe(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
     users = get_users()
-    print(update.message)
     user_data = {
         "username": update.message.chat.username,
         "first_name": update.message.chat.first_name,
     }
-    users[chat_id] = user_data
-    print(users)
+    users[str(chat_id)] = user_data
     save_users(users)
 
     message = messages.subscription_success()
@@ -107,6 +112,13 @@ def main():
     dp.add_handler(CommandHandler('state', state))
     dp.add_handler(CommandHandler('subscribe', subscribe))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
+
+    updater.job_queue.run_daily(
+        daily_message,
+        time(hour=15, minute=30),
+        name='daily_count',
+        days=(0, 1, 2, 3, 4, 5, 6),
+    )
 
     updater.start_polling()
     updater.idle()
