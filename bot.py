@@ -3,6 +3,7 @@ import telegram
 import requests
 import logging
 import messages
+import re
 from env import getenv
 
 
@@ -34,9 +35,23 @@ def statewise(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
+def state(update: telegram.Update, context: CallbackContext):
+    message = messages.ask_state_msg()
+    chat_id = update.message.chat_id
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML, reply_markup=telegram.ForceReply())
+
 def handle_message(update: telegram.Update, context: CallbackContext):
-    print(update.message)
-    message = 'Hi'
+    message = messages.default_msg()
+    if update.message.reply_to_message:
+        if update.message.reply_to_message.text == messages.ask_state_msg():
+            message = messages.get_state_msg(update.message.text)
+
+    if re.match('Hi', update.message.text, re.IGNORECASE):
+        message = messages.hello_msg(update.message.chat.first_name)
+
+    elif re.match('count', update.message.text, re.IGNORECASE):
+        message = messages.get_count_msg()
+
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
@@ -51,6 +66,7 @@ def main():
     dp.add_handler(CommandHandler('statewise',statewise))
     dp.add_handler(CommandHandler('about',about))
     dp.add_handler(CommandHandler('lastupdated',lastupdated))
+    dp.add_handler(CommandHandler('state', state))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 
     updater.start_polling()

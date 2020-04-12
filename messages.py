@@ -125,3 +125,34 @@ def get_statewise_msg():
     statewise_msg += get_footer(data)
 
     return statewise_msg
+
+def default_msg():
+    return 'Sorry, I don\'t understand that!'
+
+def hello_msg(name):
+    return 'Hello, {name}!'.format(name=name)
+
+def ask_state_msg():
+    return 'Which state do you want the count for?'
+
+def get_state_msg(state_name):
+    data = get_data()
+    states = data['statewise']
+    details = {}
+    state_msg = 'State {state} not found!'
+    for state in states:
+        if state['state'].lower() == state_name.lower():
+            details = state
+            break
+    
+    if details != {}:
+        state_msg = """<b>Number of Covid-19 cases in {state_name}:</b>
+
+😷 Confirmed: <b>{confirmed}</b>  [+{deltaconfirmed}]
+🔴 Active: <b>{active}</b>
+💚 Recovered: <b>{recovered}</b>  [+{deltarecovered}]
+💀 Deceased: <b>{deaths}</b>  [+{deltadeaths}]
+
+Updated on {updated_on}
+    """.format(state_name=details['state'], confirmed=details["confirmed"], deltaconfirmed=details["deltaconfirmed"], active=details['active'], recovered=details['recovered'], deltarecovered=details['deltarecovered'], deaths=details['deaths'], deltadeaths=details['deltadeaths'], updated_on=pretty_date_time(details['lastupdatedtime']))
+    return state_msg
