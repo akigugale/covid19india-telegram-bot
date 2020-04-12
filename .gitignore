@@ -3,4 +3,4 @@ __pycache__
 .vscode
 *.log
 *.json
-*.env
+.env
