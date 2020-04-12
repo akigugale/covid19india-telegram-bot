@@ -52,6 +52,9 @@ def handle_message(update: telegram.Update, context: CallbackContext):
     elif re.match('.*count.*', update.message.text, re.IGNORECASE):
         message = messages.get_count_msg()
 
+    elif re.match('.*state.*', update.message.text, re.IGNORECASE):
+        state(update, context)
+
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
 
