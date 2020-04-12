@@ -26,6 +26,9 @@ Info about the bot and the source.
 
 /state
 Cases identified in a particular state.
+
+/subscribe
+Get daily updates at 09:00 pm IST.
 ```
 
 ## Sources:
