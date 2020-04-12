@@ -69,6 +69,7 @@ def daily_message(context: CallbackContext):
 
 def subscribe(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
+
     users = get_users()
     user_data = {
         "username": update.message.chat.username,
@@ -79,6 +80,17 @@ def subscribe(update: telegram.Update, context: CallbackContext):
 
     message = messages.subscription_success()
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+
+def unsubscribe(update: telegram.Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    users = get_users()
+    del users[str(chat_id)]
+    save_users(users)
+
+    message = messages.unsubscription_success()
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+
 
 def handle_message(update: telegram.Update, context: CallbackContext):
     message = messages.default_msg()
@@ -111,6 +123,7 @@ def main():
     dp.add_handler(CommandHandler('lastupdated',lastupdated))
     dp.add_handler(CommandHandler('state', state))
     dp.add_handler(CommandHandler('subscribe', subscribe))
+    dp.add_handler(CommandHandler('unsubscribe', unsubscribe))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 
     updater.job_queue.run_daily(

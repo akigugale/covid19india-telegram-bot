@@ -160,3 +160,6 @@ Updated on {updated_on}
 def subscription_success():
     return """You have successfully subscribed!
 You will receive daily updates at 9:00pm IST."""
+
+def unsubscription_success():
+    return "You have successfully unsubscribed to daily updates."
