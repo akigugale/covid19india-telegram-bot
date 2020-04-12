@@ -29,6 +29,9 @@ Cases identified in a particular state.
 
 /subscribe
 Get daily updates at 09:00 pm IST.
+
+/unsubscribe
+Unsubscribe from daily updates.
 ```
 
 ## Sources:
