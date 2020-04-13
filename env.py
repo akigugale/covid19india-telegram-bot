@@ -6,7 +6,7 @@ load_dotenv(verbose=True)
 
 env_path = Path('.') / '.env'
 
-load_dotenv(dotenv_path=env_path)
+load_dotenv(dotenv_path=str(env_path))
 
 def getenv(var_name):
     return os.getenv(var_name)
