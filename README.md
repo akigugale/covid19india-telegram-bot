@@ -43,8 +43,8 @@ Python Telegram Bot Library - https://python-telegram-bot.org
 
 ## Contributers:
 
-- Akshay Gugale - @akigugale
-- Rohan Mukherjee - @roerohan
+- Akshay Gugale - [@akigugale](https://github.com/akigugale)
+- Rohan Mukherjee - [@roerohan](https://github.com/roerohan)
 
 ------
 
