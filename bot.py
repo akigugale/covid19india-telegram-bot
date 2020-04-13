@@ -11,6 +11,16 @@ from env import getenv
 
 def start(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
+
+    users = get_users()
+    user_data = {
+        "username": update.message.chat.username,
+        "first_name": update.message.chat.first_name,
+    }
+    users[str(chat_id)] = user_data
+    save_users(users)
+    
+    chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=messages.msg_start, parse_mode=telegram.ParseMode.HTML)
 
 def about(update: telegram.Update, context: CallbackContext):
