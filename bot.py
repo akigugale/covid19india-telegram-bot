@@ -152,7 +152,7 @@ def main():
 
     updater.job_queue.run_daily(
         daily_message,
-        time(hour=17, minute=22),
+        time(hour=15, minute=30),
         name='daily_count',
         days=(0, 1, 2, 3, 4, 5, 6),
     )
