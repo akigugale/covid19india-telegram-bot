@@ -24,11 +24,24 @@ Cases identified as of today.
 /statewise
 List of statewise cases in India.
 
+/state
+Cases identified in a particular state.
+
+/districtwise
+District wise cases of a particular state.
+
+/subscribe
+Get daily updates at 09:00 pm IST.
+
+/unsubscribe
+Unsubscribe from daily updates.
+
 /about
 Info about the bot and the source.
 
+You have been subscribed to daily updates at 9.00pm IST. You can unsubscribe using the /unsubscribe command.
 
-<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org
+<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org.
 
 Government Updates on: @MyGovCoronaNewsdesk
 
