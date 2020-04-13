@@ -40,6 +40,12 @@ Data - https://covid19india.org
 
 Python Telegram Bot Library - https://python-telegram-bot.org
 
+
+## Contributers:
+
+- Akshay Gugale - @akigugale
+- Rohan Mukherjee - @roerohan
+
 ------
 
 _Note: Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from <a href='https://covid19india.org'>covid19india.org</a>._
