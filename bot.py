@@ -221,7 +221,7 @@ def main():
     update_minute = 30
     update_time = getenv("UPDATE_TIME")
     if update_time != None:
-        update_hour, update_minute = update_time.split(":")
+        update_hour, update_minute = map(int, update_time.split(":"))
 
     updater.job_queue.run_daily(
         daily_message,
