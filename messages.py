@@ -131,7 +131,7 @@ def get_statewise_msg():
     💀 - Deaths
     <code>"""
     for state in statewise_data[1:]:
-        formatted_state_data = "\n {state_name}: 😷 {confirmed}   💚 {recovered}   💀 {deaths}".format(state_name=state['statecode'], confirmed=state['confirmed'], recovered=state['recovered'], deaths=state['deaths'])
+        formatted_state_data = "\n {state_name}: 😷 {confirmed:4} 💚 {recovered:4} 💀 {deaths:4}".format(state_name=state['statecode'], confirmed=state['confirmed'], recovered=state['recovered'], deaths=state['deaths'])
         statewise_msg += formatted_state_data
     # TODO: add last updated for each state and delta values?
 
