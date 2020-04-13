@@ -21,9 +21,6 @@ Cases identified as of today.
 /statewise
 List of statewise cases in India.
 
-/about
-Info about the bot and the source.
-
 /state
 Cases identified in a particular state.
 
@@ -35,6 +32,9 @@ Get daily updates at 09:00 pm IST.
 
 /unsubscribe
 Unsubscribe from daily updates.
+
+/about
+Info about the bot and the source.
 ```
 
 ## Sources:
