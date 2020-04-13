@@ -24,11 +24,11 @@ Cases identified as of today.
 /statewise
 List of statewise cases in India.
 
-/state
-Cases identified in a particular state.
-
 /districtwise
 District wise cases of a particular state.
+
+/state
+Cases identified in a particular state.
 
 /subscribe
 Get daily updates at 09:00 pm IST.
@@ -45,7 +45,7 @@ You have been subscribed to daily updates at 9.00pm IST. You can unsubscribe usi
 
 Government Updates on: @MyGovCoronaNewsdesk
 
-Built by akigugale.me
+Built by akigugale.me.
 
 Stay Home, Stay Safe! 🏡
 
