@@ -10,12 +10,17 @@ def get_data(filename='data.json'):
             return data
     except Exception as e:
         if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
-            url, url2 = get_urls()
-            fetch_url(url, 'data.json')
-            fetch_url(url2, 'data_district.json')
-            dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-            print("{timestamp} - Ran".format(timestamp=dt))
-            return get_data(filename)
+            urls = get_urls()
+
+            if filename in urls:
+                fetch_url(urls[filename], filename)
+                dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                print("{timestamp} - Ran".format(timestamp=dt))
+                return get_data(filename)
+            else:
+                print("url corresponding to {filename} is not present".format(filename=filename))
+                return False
+
         else:
             logging.error("Exception occured", exc_info=True)
     return False
@@ -210,7 +215,6 @@ def get_district_msg(state_name):
             formatted_district_data = "\n{confirmed:4} : {district_name} {delta_confirmed}".format(confirmed=district['confirmed'], delta_confirmed=get_delta_msg(district), district_name= district['district'])
             districtwise_msg += formatted_district_data
         districtwise_msg += "\n\n" + get_lastupdated_msg()
-        print(districtwise_msg)
     return districtwise_msg
 
 

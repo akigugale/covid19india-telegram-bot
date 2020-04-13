@@ -113,7 +113,6 @@ def handle_message(update: telegram.Update, context: CallbackContext):
         if update.message.reply_to_message.text == messages.ask_state_msg():
             message = messages.get_state_msg(update.message.text)
         if update.message.reply_to_message.text == messages.ask_state_for_districtwise_msg():
-            print("called")
             message = messages.get_district_msg(update.message.text)
 
     if re.match('hi|hello|hey', update.message.text, re.IGNORECASE):
