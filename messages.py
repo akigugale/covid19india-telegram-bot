@@ -1,10 +1,28 @@
 import json
 import datetime
+import logging
+from fetch_data import fetch_url, get_urls
 
 def get_data(filename='data.json'):
-    with open(filename) as f:
-        data = json.load(f)
-        return data
+    try:
+        with open(filename) as f:
+            data = json.load(f)
+            return data
+    except Exception as e:
+        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
+            urls = get_urls()
+
+            if filename in urls:
+                fetch_url(urls[filename], filename)
+                dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                print("{timestamp} - Ran".format(timestamp=dt))
+                return get_data(filename)
+            else:
+                print("url corresponding to {filename} is not present".format(filename=filename))
+                return False
+
+        else:
+            logging.error("Exception occured", exc_info=True)
     return False
 
 
@@ -39,12 +57,13 @@ Unsubscribe from daily updates.
 /about
 Info about the bot and the source.
 
+You have been subscribed to daily updates at 9.00pm IST. You can unsubscribe using the /unsubscribe command.
 
-<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org
+<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org.
 
 Government Updates on: @MyGovCoronaNewsdesk
 
-Built by akigugale.me
+Built by akigugale.me.
 
 Stay Home, Stay Safe! 🏡
 
@@ -196,7 +215,6 @@ def get_district_msg(state_name):
             formatted_district_data = "\n{confirmed:4} : {district_name} {delta_confirmed}".format(confirmed=district['confirmed'], delta_confirmed=get_delta_msg(district), district_name= district['district'])
             districtwise_msg += formatted_district_data
         districtwise_msg += "\n\n" + get_lastupdated_msg()
-        print(districtwise_msg)
     return districtwise_msg
 
 
