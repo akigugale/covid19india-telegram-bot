@@ -1,10 +1,23 @@
 import json
 import datetime
+import logging
+from fetch_data import fetch_url, get_urls
 
 def get_data(filename='data.json'):
-    with open(filename) as f:
-        data = json.load(f)
-        return data
+    try:
+        with open(filename) as f:
+            data = json.load(f)
+            return data
+    except Exception as e:
+        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
+            url, url2 = get_urls()
+            fetch_url(url, 'data.json')
+            fetch_url(url2, 'data_district.json')
+            dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            print("{timestamp} - Ran".format(timestamp=dt))
+            return get_data(filename)
+        else:
+            logging.error("Exception occured", exc_info=True)
     return False
 
 
