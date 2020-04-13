@@ -8,19 +8,39 @@ import json
 from datetime import time
 from env import getenv
 
+def get_users():
+    try:
+        with open('users.json') as f:
+            data = json.load(f)
+            return data
+    except Exception as e:
+        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
+            open('users.json', 'w+').write(json.dumps({}))
+            return {}
+        else:
+            logging.error("Exception occured", exc_info=True)
+    return False
+
+def save_users(users):
+    try:
+        open("users.json", "w").write(json.dumps(users))
+    except Exception:
+        logging.error("Exception occured", exc_info=True)
+
+def add_user(chat_id, username, first_name):
+    users = get_users()
+    user_data = {
+        "username": username,
+        "first_name": first_name,
+    }
+    users[str(chat_id)] = user_data
+    save_users(users)
 
 def start(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
 
-    users = get_users()
-    user_data = {
-        "username": update.message.chat.username,
-        "first_name": update.message.chat.first_name,
-    }
-    users[str(chat_id)] = user_data
-    save_users(users)
-    
-    chat_id = update.message.chat_id
+    add_user(chat_id, update.message.chat.username, update.message.chat.first_name)
+
     context.bot.send_message(chat_id=chat_id, text=messages.msg_start, parse_mode=telegram.ParseMode.HTML)
 
 def about(update: telegram.Update, context: CallbackContext):
@@ -57,41 +77,21 @@ def districtwise(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML, reply_markup=telegram.ForceReply())
 
-def get_users():
-    try:
-        with open('users.json') as f:
-            data = json.load(f)
-            return data
-    except Exception as e:
-        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
-            open('users.json', 'w+').write(json.dumps({}))
-            return {}
-        else:
-            logging.error("Exception occured", exc_info=True)
-    return False
-
-def save_users(users):
-    try:
-        open("users.json", "w").write(json.dumps(users))
-    except Exception:
-        logging.error("Exception occured", exc_info=True)
-
 def daily_message(context: CallbackContext):
     users = get_users()
     message = messages.get_count_msg()
     for chat_id in users:
-        context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+        try:
+            context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
+        except Exception as e:
+            if type(e).__name__ == 'Unauthorized':
+                print('{name} has blocked the bot.'.format(name=users[chat_id]['first_name']))
+            continue
 
 def subscribe(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
 
-    users = get_users()
-    user_data = {
-        "username": update.message.chat.username,
-        "first_name": update.message.chat.first_name,
-    }
-    users[str(chat_id)] = user_data
-    save_users(users)
+    add_user(chat_id, update.message.chat.username, update.message.chat.first_name)
 
     message = messages.subscription_success()
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML)
@@ -152,7 +152,7 @@ def main():
 
     updater.job_queue.run_daily(
         daily_message,
-        time(hour=15, minute=30),
+        time(hour=17, minute=22),
         name='daily_count',
         days=(0, 1, 2, 3, 4, 5, 6),
     )
