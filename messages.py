@@ -76,7 +76,7 @@ msg_about = """<b>This is the India Covid-19 Tracker Bot! 🦠 🇮🇳</b>
 
 The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) based on a crowdsourced dataset for India.
 
-Contributors: @akigugale & @roerohan
+Contributors: @akigugale, @roerohan & @Pkhr9
 
 Built by - <a href="https://twitter.com/akigugale">@akigugale</a>
 
