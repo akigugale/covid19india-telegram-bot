@@ -42,6 +42,11 @@ def state(update: telegram.Update, context: CallbackContext):
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML, reply_markup=telegram.ForceReply())
 
+def districtwise(update: telegram.Update, context: CallbackContext):
+    message = messages.ask_state_for_districtwise_msg()
+    chat_id = update.message.chat_id
+    context.bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.HTML, reply_markup=telegram.ForceReply())
+
 def get_users():
     try:
         with open('users.json') as f:
@@ -97,6 +102,9 @@ def handle_message(update: telegram.Update, context: CallbackContext):
     if update.message.reply_to_message:
         if update.message.reply_to_message.text == messages.ask_state_msg():
             message = messages.get_state_msg(update.message.text)
+        if update.message.reply_to_message.text == messages.ask_state_for_districtwise_msg():
+            print("called")
+            message = messages.get_district_msg(update.message.text)
 
     if re.match('hi|hello|hey', update.message.text, re.IGNORECASE):
         message = messages.hello_msg(update.message.chat.first_name)
@@ -109,7 +117,7 @@ def handle_message(update: telegram.Update, context: CallbackContext):
 
     elif re.match('.*unsubscribe', update.message.text, re.IGNORECASE):
         unsubscribe(update, context)
-    
+
     elif re.match('.*subscribe', update.message.text, re.IGNORECASE):
         subscribe(update, context)
 
@@ -128,6 +136,7 @@ def main():
     dp.add_handler(CommandHandler('about',about))
     dp.add_handler(CommandHandler('lastupdated',lastupdated))
     dp.add_handler(CommandHandler('state', state))
+    dp.add_handler(CommandHandler('districtwise', districtwise))
     dp.add_handler(CommandHandler('subscribe', subscribe))
     dp.add_handler(CommandHandler('unsubscribe', unsubscribe))
     dp.add_handler(MessageHandler(Filters.text, handle_message))

@@ -1,8 +1,8 @@
 import json
 import datetime
 
-def get_data():
-    with open('data.json') as f:
+def get_data(filename='data.json'):
+    with open(filename) as f:
         data = json.load(f)
         return data
     return False
@@ -135,16 +135,19 @@ def hello_msg(name):
 def ask_state_msg():
     return 'Which state do you want the count for?'
 
+def ask_state_for_districtwise_msg():
+    return 'Which state\'s district count do you want?'
+
 def get_state_msg(state_name):
     data = get_data()
     states = data['statewise']
     details = {}
-    state_msg = 'State {state} not found!'
+    state_msg = 'State {state} not found!'.format(state=state_name)
     for state in states:
-        if state['state'].lower() == state_name.lower():
+        if state['state'].lower() == state_name.lower().strip():
             details = state
             break
-    
+
     if details != {}:
         state_msg = """<b>Number of Covid-19 cases in {state_name}:</b>
 
@@ -156,6 +159,32 @@ def get_state_msg(state_name):
 Updated on {updated_on}
     """.format(state_name=details['state'], confirmed=details["confirmed"], deltaconfirmed=details["deltaconfirmed"], active=details['active'], recovered=details['recovered'], deltarecovered=details['deltarecovered'], deaths=details['deaths'], deltadeaths=details['deltadeaths'], updated_on=pretty_date_time(details['lastupdatedtime']))
     return state_msg
+
+
+def get_delta_msg(district):
+    delta_msg = ""
+    if district['delta']['confirmed'] != 0:
+        delta_msg += "(+{delta_count})".format(delta_count=district['delta']['confirmed'])
+    return delta_msg
+
+def get_district_msg(state_name):
+    dist_data = get_data('data_district.json')
+    state_data = []
+    for s in dist_data:
+        if s['state'].lower() == state_name.lower().strip():
+            state_data = s['districtData']
+            break
+    districtwise_msg = "No data found for State {state}".format(state=state_name)
+    if state_data != []:
+        state_data = sorted(state_data, key = lambda i: i['confirmed'],reverse=True)
+        districtwise_msg = "District-wise cases till now in {state_name}:\n".format(state_name=state_name)
+        for district in state_data:
+            formatted_district_data = "\n{confirmed:4} : {district_name} {delta_confirmed}".format(confirmed=district['confirmed'], delta_confirmed=get_delta_msg(district), district_name= district['district'])
+            districtwise_msg += formatted_district_data
+        districtwise_msg += "\n\n" + get_lastupdated_msg()
+        print(districtwise_msg)
+    return districtwise_msg
+
 
 def subscription_success():
     return """You have successfully subscribed!
