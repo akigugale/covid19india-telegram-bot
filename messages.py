@@ -1,10 +1,28 @@
 import json
 import datetime
+import logging
+from fetch_data import fetch_url, get_urls
 
-def get_data():
-    with open('data.json') as f:
-        data = json.load(f)
-        return data
+def get_data(filename='data.json'):
+    try:
+        with open(filename) as f:
+            data = json.load(f)
+            return data
+    except Exception as e:
+        if type(e).__name__ == 'JSONDecodeError' or type(e).__name__ == 'FileNotFoundError':
+            urls = get_urls()
+
+            if filename in urls:
+                fetch_url(urls[filename], filename)
+                dt = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                print("{timestamp} - Ran".format(timestamp=dt))
+                return get_data(filename)
+            else:
+                print("url corresponding to {filename} is not present".format(filename=filename))
+                return False
+
+        else:
+            logging.error("Exception occured", exc_info=True)
     return False
 
 
@@ -24,15 +42,28 @@ Cases identified as of today.
 /statewise
 List of statewise cases in India.
 
+/districtwise
+District wise cases of a particular state.
+
+/state
+Cases identified in a particular state.
+
+/subscribe
+Get daily updates at 09:00 pm IST.
+
+/unsubscribe
+Unsubscribe from daily updates.
+
 /about
 Info about the bot and the source.
 
+You have been subscribed to daily updates at 9.00pm IST. You can unsubscribe using the /unsubscribe command.
 
-<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org
+<i>Note:</i> Open source community generated bot for the people to stay informed. No legal obligation. Community generated data from covid19india.org.
 
 Government Updates on: @MyGovCoronaNewsdesk
 
-Built by akigugale.me
+Built by akigugale.me.
 
 Stay Home, Stay Safe! 🏡
 
@@ -44,6 +75,8 @@ msg_about = """<b>This is the India Covid-19 Tracker Bot! 🦠 🇮🇳</b>
 (<i>a crowdsouced initiative</i>)
 
 The first telegram bot to help track the spread of COVID-19 (coronavirus disease 2019) based on a crowdsourced dataset for India.
+
+Contributors: @akigugale, @roerohan & @Pkhr9
 
 Built by - <a href="https://twitter.com/akigugale">@akigugale</a>
 
@@ -117,7 +150,7 @@ def get_statewise_msg():
     💀 - Deaths
     <code>"""
     for state in statewise_data[1:]:
-        formatted_state_data = "\n {state_name}: 😷 {confirmed}   💚 {recovered}   💀 {deaths}".format(state_name=state['statecode'], confirmed=state['confirmed'], recovered=state['recovered'], deaths=state['deaths'])
+        formatted_state_data = "\n {state_name}: 😷 {confirmed:4} 💚 {recovered:4} 💀 {deaths:4}".format(state_name=state['statecode'], confirmed=state['confirmed'], recovered=state['recovered'], deaths=state['deaths'])
         statewise_msg += formatted_state_data
     # TODO: add last updated for each state and delta values?
 
@@ -125,3 +158,69 @@ def get_statewise_msg():
     statewise_msg += get_footer(data)
 
     return statewise_msg
+
+def default_msg():
+    return 'Sorry, I don\'t understand that!'
+
+def hello_msg(name):
+    return 'Hello, {name}!'.format(name=name)
+
+def ask_state_msg():
+    return 'Which state do you want the count for?'
+
+def ask_state_for_districtwise_msg():
+    return 'Which state\'s district count do you want?'
+
+def get_state_msg(state_name):
+    data = get_data()
+    states = data['statewise']
+    details = {}
+    state_msg = 'State {state} not found!'.format(state=state_name)
+    for state in states:
+        if state['state'].lower() == state_name.lower().strip():
+            details = state
+            break
+
+    if details != {}:
+        state_msg = """<b>Number of Covid-19 cases in {state_name}:</b>
+
+😷 Confirmed: <b>{confirmed}</b>  [+{deltaconfirmed}]
+🔴 Active: <b>{active}</b>
+💚 Recovered: <b>{recovered}</b>  [+{deltarecovered}]
+💀 Deceased: <b>{deaths}</b>  [+{deltadeaths}]
+
+Updated on {updated_on}
+    """.format(state_name=details['state'], confirmed=details["confirmed"], deltaconfirmed=details["deltaconfirmed"], active=details['active'], recovered=details['recovered'], deltarecovered=details['deltarecovered'], deaths=details['deaths'], deltadeaths=details['deltadeaths'], updated_on=pretty_date_time(details['lastupdatedtime']))
+    return state_msg
+
+
+def get_delta_msg(district):
+    delta_msg = ""
+    if district['delta']['confirmed'] != 0:
+        delta_msg += "(+{delta_count})".format(delta_count=district['delta']['confirmed'])
+    return delta_msg
+
+def get_district_msg(state_name):
+    dist_data = get_data('data_district.json')
+    state_data = []
+    for s in dist_data:
+        if s['state'].lower() == state_name.lower().strip():
+            state_data = s['districtData']
+            break
+    districtwise_msg = "No data found for State {state}".format(state=state_name)
+    if state_data != []:
+        state_data = sorted(state_data, key = lambda i: i['confirmed'],reverse=True)
+        districtwise_msg = "District-wise cases till now in {state_name}:\n".format(state_name=state_name)
+        for district in state_data:
+            formatted_district_data = "\n{confirmed:4} : {district_name} {delta_confirmed}".format(confirmed=district['confirmed'], delta_confirmed=get_delta_msg(district), district_name= district['district'])
+            districtwise_msg += formatted_district_data
+        districtwise_msg += "\n\n" + get_lastupdated_msg()
+    return districtwise_msg
+
+
+def subscription_success():
+    return """You have successfully subscribed!
+You will receive daily updates at 9:00pm IST."""
+
+def unsubscription_success():
+    return "You have successfully unsubscribed to daily updates."

@@ -21,6 +21,18 @@ Cases identified as of today.
 /statewise
 List of statewise cases in India.
 
+/state
+Cases identified in a particular state.
+
+/districtwise
+District wise cases of a particular state.
+
+/subscribe
+Get daily updates at 09:00 pm IST.
+
+/unsubscribe
+Unsubscribe from daily updates.
+
 /about
 Info about the bot and the source.
 ```
@@ -30,6 +42,13 @@ Info about the bot and the source.
 Data - https://covid19india.org
 
 Python Telegram Bot Library - https://python-telegram-bot.org
+
+
+## Contributors:
+
+- Akshay Gugale - [@akigugale](https://github.com/akigugale)
+- Rohan Mukherjee - [@roerohan](https://github.com/roerohan)
+- Prakhar Lohiya - [@MisterParker](https://github.com/MisterParker)
 
 ------
 
