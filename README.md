@@ -13,7 +13,7 @@ The first telegram bot to help track the spread of COVID-19 (coronavirus disease
 <u>**Commands:**</b>
 ```
 /count
-Total cases identified COVID-19 cases in India.
+Total identified COVID-19 cases in India.
 
 /today
 Cases identified as of today.
