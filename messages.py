@@ -177,7 +177,8 @@ def get_state_msg(state_name):
     details = {}
     state_msg = 'State {state} not found!'.format(state=state_name)
     for state in states:
-        if state['state'].lower() == state_name.lower().strip():
+        state_lower = state_name.lower().strip()
+        if state['state'].lower() == state_lower or state['statecode'].lower() == state_lower:
             details = state
             break
 
