@@ -217,11 +217,8 @@ def main():
     dp.add_handler(CommandHandler("unsubscribe", unsubscribe))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 
-    update_hour = 15
-    update_minute = 30
     update_time = getenv("UPDATE_TIME")
-    if update_time != None:
-        update_hour, update_minute = map(int, update_time.split(":"))
+    update_hour, update_minute = map(int, update_time.split(":"))
 
     updater.job_queue.run_daily(
         daily_message,
